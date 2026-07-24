@@ -101,9 +101,9 @@ Run it and read the error message carefully.
 
 **Questions to answer:**
 
-1. What line number does the error point to?
-2. What is the specific error message?
-3. What punctuation is missing?
+1. What line number does the error point to? line 3 / line 8
+2. What is the specific error message? f-string: expecting "}" greet (name)
+3. What punctuation is missing? "}" Miss coma
 
 Fix the error, then add this code to the same file:
 
@@ -144,7 +144,7 @@ Run it and observe the error.
 
 **Exercise steps:**
 
-1. Read the error message - what does it tell you?
+1. Read the error message - what does it tell you? line 1 in module print (user_name) user_name is not defined
 2. Fix the error by reordering the lines
 3. Add this code and run again:
 

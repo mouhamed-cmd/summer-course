@@ -17,7 +17,8 @@ These exercises focus on using `if`, `elif`, and `else` statements to control pr
 
 ---
 
-### Exercise 2: Even or Odd
+### Exercise 2: Even or Od
+d
 
 **Goal**: Write a Python script that asks a user for an integer number.  Check if the number is even or odd using `if` and `else`.
 
@@ -87,6 +88,8 @@ b = 20
 number = 15
 ```
 
+
++
 ✅ *Check*: Should print "Number is in range" if between 10 and 20, otherwise should print "Out of range".
 
 ---
@@ -117,6 +120,7 @@ Rules:
 ### Stretch:  Exercise 10: Nested Conditionals - BMI Calculator
 
 **Goal**: Write a Python Script that asks the user for their weight in kilograms and their height in meters.  Calculate BMI category using correct `if-elif-else` structure.
+
 
 - BMI < 18.5: "Underweight"
 - BMI 18.5-24.9: "Normal weight"

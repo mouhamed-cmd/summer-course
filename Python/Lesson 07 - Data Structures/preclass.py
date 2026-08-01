@@ -7,3 +7,10 @@ signals_sorted = sorted(signals, reverse=True)
 high_5 = signals_sorted[:5]
 coordinate = sum(high_5) / 10.0
 print(f"the coordinate is {coordinate}")
+
+
+
+# Exercise 3
+# Write a function that doubles the elements in a list.
+
+def double_list

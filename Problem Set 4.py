@@ -1,43 +1,46 @@
+# problem 1
 class Soldier:
     """Represents a soldier with rank, fitness, and deployment status."""
 
     def __init__(self, name: str, rank: str, fitness: int, deployed: bool):
+        # store passed values on the instance
         self.name = name
         self.rank = rank
-        self.fitness = fitness
-        self.deployed = deployed
+        self.fitness = int(fitness)
+        self.deployed = bool(deployed)
 
     def dispatch(self) -> None:
         """Mark this soldier as deployed."""
         self.deployed = True
 
     def __str__(self) -> str:
-        return f"{self.name} ({self.rank}, fitness: {self.fitness}, deployed: {self.deployed})"
+        # match the report format used elsewhere in the repo/tests
+        status = "deployed" if self.deployed else "available"
+        return f"{self.name} | {self.rank} | Fitness:{self.fitness} | Status:{status}"
 
 
 def process_reports(report_list: list[str]) -> tuple[dict[str, Soldier], set[str]]:
     """Parse report strings and return (roster_dict, ranks_set)."""
-    roster = {}
-    ranks = set()
+    roster: dict[str, Soldier] = {}
+    ranks: set[str] = set()
 
     for report in report_list:
-        parts = []
-        for part in report.split("|"):
-            parts.append(part.strip())
+        # expected format: "NAME | Rank | Fitness:NN | Status:available"
+        parts = [p.strip() for p in report.split("|")]
+        if len(parts) < 4:
+            # skip malformed lines
+            continue
+        name = parts[0]
+        rank = parts[1]
+        # parts[2] expected "Fitness:NN"
+        fitness_part = parts[2].split(":", 1)
+        fitness = int(fitness_part[1].strip()) if len(fitness_part) > 1 else 0
+        # parts[3] expected "Status:available" or "Status:deployed"
+        status_part = parts[3].split(":", 1)
+        status = status_part[1].strip().lower() if len(status_part) > 1 else "available"
+        deployed = status == "deployed"
 
-        # Expecting format: NAME | Rank | Fitness:NN | Status:state
-        name = parts[0].title()
-        rank = parts[1].upper()
-        fitness_field = int(parts[2].split(":", 1)[1].strip())
-        status_field = parts[3].split(":", 1)[1].strip().lower()
-
-        soldier = Soldier(
-            name=name,
-            rank=rank,
-            fitness=fitness_field,
-            deployed=(status_field == "deployed"),
-        )
-
+        soldier = Soldier(name, rank, fitness, deployed)
         roster[name] = soldier
         ranks.add(rank)
 
@@ -46,46 +49,36 @@ def process_reports(report_list: list[str]) -> tuple[dict[str, Soldier], set[str
 
 def show_available(roster: dict[str, Soldier]) -> None:
     """Display all available soldiers, sorted alphabetically."""
-    available_soldiers = []
-
-    for name, soldier in roster.items():
-        if not soldier.deployed:
-            available_soldiers.append(name)
-
-    available_soldiers.sort()
-    print(f"Available soldiers: {available_soldiers}\n")
+    available = [name for name, s in roster.items() if not s.deployed]
+    for name in sorted(available):
+        print(name)
 
 
 def dispatch(roster: dict[str, Soldier], name: str) -> None:
     """Dispatch a soldier by name, or print an error if not available."""
-    display_name = name.title()
-    print(f"Dispatching {display_name}...", end=" ")
-
-    soldier = roster.get(display_name)
-    if soldier is None:
-        print(f"{display_name} not found in roster.")
+    if name not in roster:
+        print(f"Soldier {name} not found")
         return
 
-    if not soldier.deployed:
-        soldier.dispatch()
-        print("Done. Status set to deployed.")
+    soldier = roster[name]
+    if soldier.deployed:
+        print(f"{name} is already deployed")
     else:
-        print(f"{display_name} is already deployed.")
+        soldier.dispatch()
 
 
 def fitness_report(roster: dict[str, Soldier]) -> dict[str, list[str]]:
     """Return a dict with 'high', 'medium', 'low' fitness bands."""
     bands = {"high": [], "medium": [], "low": []}
-
-    for name, soldier in roster.items():
-        if soldier.fitness >= 80:
+    for name, s in roster.items():
+        if s.fitness >= 80:
             bands["high"].append(name)
-        elif 60 <= soldier.fitness <= 79:
+        elif s.fitness >= 60:
             bands["medium"].append(name)
         else:
             bands["low"].append(name)
 
-    for level in bands.values():
-        level.sort()
-
+    # keep list order deterministic for tests
+    for k in bands:
+        bands[k].sort()
     return bands

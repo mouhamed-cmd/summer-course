@@ -102,9 +102,9 @@ class Recipe:
     def can_make(self, pantry_set: set[str]) -> bool:
         """Check if all ingredients are in the pantry."""
         for ingredient in self.ingredients:
-                    if ingredient not in pantry_set:
-                        return False
-                    return True
+            if ingredient not in pantry_set:
+                return False
+        return True
 
     def missing_ingredients(self, pantry_set: set[str]) -> list[str]:
         """Return sorted list of missing ingredients."""
@@ -112,8 +112,9 @@ class Recipe:
         for ingredient in self.ingredients:
             if ingredient not in pantry_set:
                 missing.append(ingredient)
-            missing.sort()
-            return missing
+        missing.sort()
+        return missing
+
 
 class Pantry:
     """Represents a pantry with a set of ingredients."""
@@ -128,10 +129,7 @@ class Pantry:
 
     def has(self, ingredient: str) -> bool:
         """Check if the pantry contains an ingredient."""
-        for item in self.items:
-            if item not in self.items:
-                return False
-            return True
+        return ingredient in self.items
 
     def get_items(self) -> set[str]:
         """Return the set of all items in the pantry."""
